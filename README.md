@@ -2,7 +2,7 @@
 ## 1. Set Up AWS
 1. Go to AWS console to create an instance, and connect with the instance using ssh client.
 2. Create a Target Group that contains the instance
-3. Create a Load Balancer. This is the "url" that you will be using to access your instance. 
+3. Create a Load Balancer. This is the "entry point" that users will be entering to access your instance. 
 ## 2. Setup Project
 ```shell
 sudo apt update
