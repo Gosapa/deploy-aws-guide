@@ -2,11 +2,12 @@
 ## 1. Set Up AWS
 1. Go to AWS console to create an instance, and connect with the instance using ssh client.
 2. Create a Target Group that contains the instance
-3. Create a Load Balancer. This is the "entry point" that users will be entering to access your instance. 
+3. Create a Load Balancer with default security group. This is the "entry point" that users will be entering to access your instance. 
+4. Set up RDS with a new security group.
 ## 2. Setup Project
 ```shell
 sudo apt update
-sudo apt install python3-pip python3 dev nginx
+sudo apt install python3-pip python3-dev nginx
 sudo apt install python3-virtualenv
 ```
 
@@ -22,7 +23,7 @@ virtualenv venv
 Activate virtual environment, and install all the dependencies.
 ```shell
 source venv/bin/activate
-pip install -r requirements
+pip install -r requirements.txt
 ```
 Install Gunicorn as well.
 ```shell
@@ -72,7 +73,7 @@ After=network.target
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/{PROJECT_NAME}
-ExecStart = /home/ubuntu/{PROJECT_NAME}/venv/bin/gunicorn \
+ExecStart=/home/ubuntu/{PROJECT_NAME}/venv/bin/gunicorn \
         --access-logfile - \
         --workers 3 \
         --bind unix:/run/gunicorn.sock \
@@ -117,7 +118,7 @@ sudo ln -s /etc/nginx/sites-available/bloc /etc/nginx/sites-enabled/
 ```
 Load static files using the following command
 ```shell
-sudo gpasswd -a www-data username
+sudo gpasswd -a www-data ubuntu
 ```
 Restart nginx and allow the changes to take place
 ```shell
@@ -140,4 +141,4 @@ Now, the server should be up and running.
 1. Visit Amazon Certificate Manager
 2. Enter your full domain, and create the certificate
 3. After createing the certificate, create certificate record in the same hosted zone as the domain in route 53.
-4. Allow HTTPS requests from port 443 in security group and load balancers. 
+4. Allow HTTPS requests from port 443 in security group and load balancers.
